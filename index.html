@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,16 +33,27 @@
         }
         /* Header */
         header {
-            padding: 12px 15px;
+            padding: 10px 15px;
             background-color: #121212;
             border-bottom: 1px solid #222;
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         header h1 {
             color: #D4AF37;
             font-family: 'Cinzel', serif;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             letter-spacing: 2px;
+        }
+        .logout-btn {
+            background: #222;
+            color: #ff4b4b;
+            border: 1px solid #333;
+            padding: 5px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.75rem;
         }
         /* Navigation / Rooms Switcher */
         .nav-bar {
@@ -210,9 +222,9 @@
     <div id="login-screen">
         <div class="login-box">
             <h2>🖤 OMBIRI</h2>
-            <input type="text" id="username-input" placeholder="Enter Your Name">
+            <input type="text" id="username-input" placeholder="Enter Your Unique Name">
             <input type="password" id="password-input" placeholder="Enter Password">
-            <button class="send-btn" style="padding: 12px;" onclick="handleLogin()">Enter App</button>
+            <button class="send-btn" style="padding: 12px;" onclick="handleLogin()">Sign In / Register</button>
             <p id="login-error" style="color: #ff4b4b; font-size: 0.85rem; text-align: center;"></p>
         </div>
     </div>
@@ -220,11 +232,14 @@
     <!-- Main App Layout -->
     <div class="app-container">
         <header>
-            <h1>🖤 OMBIRI</h1>
-            <p id="room-subtitle" style="font-size: 0.8rem; color: #888; margin-top: 4px;">Total Chat (Team Group)</p>
+            <div>
+                <h1>🖤 OMBIRI</h1>
+                <p id="room-subtitle" style="font-size: 0.75rem; color: #888; margin-top: 2px;">Total Chat (Team Group)</p>
+            </div>
+            <button class="logout-btn" onclick="handleLogout()">Sign Out</button>
         </header>
 
-        <!-- Room Navigation Bar (Dynamic switching between Group and 1v1 chats) -->
+        <!-- Room Navigation Bar -->
         <div class="nav-bar" id="nav-rooms">
             <button class="nav-btn active" onclick="switchChat('group', this)">💬 Group Chat</button>
         </div>
@@ -245,9 +260,9 @@
     </div>
 
     <script>
-        // REPLACE WITH YOUR FIREBASE CONFIGURATION
+        // FIREBASE DATABASE CONNECTION
         const firebaseConfig = {
-            databaseURL: "https://YOUR-FIREBASE-APP-DEFAULT-RDB.firebaseio.com"
+            databaseURL: "https://the-final-basamati-default-rtdb.firebaseio.com/" 
         };
         
         if (!firebase.apps.length) {
@@ -279,11 +294,16 @@
             localStorage.setItem("ombiri_user", name);
             currentUser = name;
             
-            // Register user in Firebase database automatically
+            // Register user in Firebase database so others see them for 1v1 chats
             firebase.database().ref('users/' + name).set({ name: name });
 
             document.getElementById("login-screen").style.display = "none";
             initChat();
+        }
+
+        function handleLogout() {
+            localStorage.removeItem("ombiri_user");
+            location.reload();
         }
 
         function switchChat(recipient, btnElement) {
@@ -304,15 +324,16 @@
         function loadUsersAndRooms() {
             firebase.database().ref('users').on('value', (snapshot) => {
                 const navBar = document.getElementById("nav-rooms");
-                navBar.innerHTML = `<button class="nav-btn ${currentRecipient === 'group' ? 'active' : ''}" onclick="switchChat('group', this)">💬 Group Chat</button>`;
+                let html = `<button class="nav-btn ${currentRecipient === 'group' ? 'active' : ''}" onclick="switchChat('group', this)">💬 Group Chat</button>`;
                 
                 snapshot.forEach((child) => {
                     const user = child.val();
-                    if (user.name !== currentUser) {
+                    if (user && user.name && user.name !== currentUser) {
                         const isActive = currentRecipient === user.name ? 'active' : '';
-                        navBar.innerHTML += `<button class="nav-btn ${isActive}" onclick="switchChat('${user.name}', this)">👤 ${user.name}</button>`;
+                        html += `<button class="nav-btn ${isActive}" onclick="switchChat('${user.name}', this)">👤 ${user.name}</button>`;
                     }
                 });
+                navBar.innerHTML = html;
             });
         }
 
