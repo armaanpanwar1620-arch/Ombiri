@@ -280,15 +280,16 @@
     </div>
 
     <script>
-        // FULL FIREBASE CONFIGURATION
+        // YOUR EXACT FIREBASE CONFIGURATION (WITH DATABASE URL ADDED)
         const firebaseConfig = {
-            apiKey: "AIzaSyDummyKeyForOmbiriAppCheck123",
-            authDomain: "the-final-basamati.firebaseapp.com",
-            databaseURL: "https://the-final-basamati-default-rtdb.firebaseio.com/",
-            projectId: "the-final-basamati",
-            storageBucket: "the-final-basamati.appspot.com",
-            messagingSenderId: "1234567890",
-            appId: "1:1234567890:web:abcdef123456"
+            apiKey: "AIzaSyAgHkq2jIi82FSN5Lsz...",
+            authDomain: "ombiri.firebaseapp.com",
+            databaseURL: "https://ombiri-default-rtdb.firebaseio.com/",
+            projectId: "ombiri",
+            storageBucket: "ombiri.appspot.com",
+            messagingSenderId: "877048914733",
+            appId: "1:877048914733:web:3173...",
+            measurementId: "G-ZBPXPJ8SLD"
         };
         
         if (!firebase.apps.length) {
@@ -299,7 +300,6 @@
         let currentDP = localStorage.getItem("ombiri_dp") || "https://i.imgur.com/6VBx3io.png";
         let currentRecipient = "group";
 
-        // Auto-check active session
         if (currentUser) {
             document.getElementById("login-screen").style.display = "none";
             initChat();
@@ -322,7 +322,6 @@
             localStorage.setItem("ombiri_user", name);
             currentUser = name;
             
-            // Register account entry in Firebase
             firebase.database().ref('users/' + name).set({
                 name: name,
                 dp: currentDP
@@ -357,7 +356,6 @@
                     localStorage.setItem("ombiri_dp", currentDP);
                     document.getElementById("my-dp-preview").src = currentDP;
                     
-                    // Sync DP across Firebase
                     firebase.database().ref('users/' + currentUser).update({ dp: currentDP });
                     alert("Profile DP Updated!");
                     closeProfileScreen();
@@ -382,7 +380,6 @@
             loadMessages();
         }
 
-        // Pulls registered members dynamically for 1v1 chats
         function loadUsersAndRooms() {
             firebase.database().ref('users').on('value', (snapshot) => {
                 const navBar = document.getElementById("nav-rooms");
@@ -399,7 +396,6 @@
             });
         }
 
-        // Live Realtime Database Message Listener
         function loadMessages() {
             const dbRef = firebase.database().ref('messages');
             const container = document.getElementById("chat-messages");
