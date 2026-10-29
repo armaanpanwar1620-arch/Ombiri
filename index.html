@@ -1,39 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ombiri - Black & Gold Chat</title>
+
     <style>
         :root {
             --gold: #D4AF37;
-            --dark-gold: #AA7C11;
-            --black: #0A0A0A;
-            --dark-grey: #1A1A1A;
-            --light-grey: #2A2A2A;
-            --text-gold: #F3E5AB;
-        }
-        body {
-            margin: 0; padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--black);
-            color: var(--text-gold);
-            display: flex; height: 100vh; overflow: hidden;
-        }
-        .login-container, .app-container {
-            display: flex; width: 100vw; height: 100vh;
-        }
-        .login-card {
-            margin: auto; background: var(--dark-grey);
-            border: 2px solid var(--gold); padding: 30px;
-            border-radius: 12px; text-align: center; width: 300px;
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
-        }
-        .login-card h2 { color: var(--gold); margin-bottom: 5px; }
-        .credits { font-size: 0.85rem; color: var(--dark-gold); margin-bottom: 20px; font-weight: bold; }
-        .login-card input {
-            width: 90%; padding: 10px; margin: 8px 0;
-            background: var(--light-grey); border: 1px solid var(--gold);
+            --dark-gold: #AA7C11
             color: #fff; border-radius: 6px;
         }
         .btn {
@@ -55,7 +24,7 @@
             border-bottom: 1px solid #333; cursor: pointer;
         }
         .member-item:hover, .member-item.active { background: var(--light-grey); border-left: 4px solid var(--gold); }
-        .dp { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--gold); margin-right: 12px; }
+        .dp { width: 40px; height: 40px; border-radius: 50%; border: 1px id var(--gold); margin-right: 12px; }
         
         .chat-area { flex: 1; display: flex; flex-direction: column; background: var(--black); }
         .messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
@@ -105,7 +74,7 @@
                 <h4 id="roomTitle" style="margin: 0; color: var(--gold);">Global Group</h4>
             </div>
             <div class="messages" id="messageContainer"></div>
-            <div class="input-bar">
+   
                 <input type="text" id="msgInput" placeholder="Type a message..." onkeydown="if(event.key==='Enter') sendMessage()">
                 <button class="btn" style="width: auto;" onclick="sendMessage()">Send</button>
             </div>
@@ -120,71 +89,4 @@
         function login() {
             const user = document.getElementById('userInput').value;
             const pass = document.getElementById('passInput').value;
-            if(pass === "123456" && user.trim() !== "") {
-                currentUsername = user;
-                startApp();
-            } else {
-                document.getElementById('errorMsg').style.display = "block";
-            }
-        }
-
-        function waLogin() {
-            currentUsername = "WhatsApp_User";
-            startApp();
-        }
-
-        function startApp() {
-            document.getElementById('loginScreen').classList.add('hidden');
-            document.getElementById('chatScreen').classList.remove('hidden');
-            loadCandidates();
-        }
-
-        function loadCandidates() {
-            const list = document.getElementById('memberList');
-            list.innerHTML = `<div class="member-item active" onclick="switchRoom('Global Group', this)">
-                <img src="https://api.dicebear.com/7.x/bottts/svg?seed=Global" class="dp">
-                <div><strong>Global Group</strong></div>
-            </div>`;
-            
-            for(let i=1; i<=16; i++) {
-                let name = `Candidate ${i}`;
-                chats[name] = [];
-                list.innerHTML += `<div class="member-item" onclick="switchRoom('${name}', this)">
-                    <img src="https://api.dicebear.com/7.x/bottts/svg?seed=${name}" class="dp">
-                    <div><strong>${name}</strong><br><small style="color:green;">● Online</small></div>
-                </div>`;
-            }
-            switchRoom('Global Group', list.children[0]);
-        }
-
-        function switchRoom(roomName, element) {
-            currentRoom = roomName;
-            document.getElementById('roomTitle').innerText = roomName;
-            document.querySelectorAll('.member-item').forEach(el => el.classList.remove('active'));
-            element.classList.add('active');
-            renderMessages();
-        }
-
-        function sendMessage() {
-            const input = document.getElementById('msgInput');
-            if(!input.value.trim()) return;
-            
-            chats[currentRoom].push({ sender: currentUsername, text: input.value });
-            input.value = "";
-            renderMessages();
-        }
-
-        function renderMessages() {
-            const container = document.getElementById('messageContainer');
-            container.innerHTML = "";
-            chats[currentRoom].forEach(msg => {
-                const div = document.createElement('div');
-                div.className = "message-bubble " + (msg.sender === currentUsername ? "self" : "");
-                div.innerHTML = `<strong>${msg.sender}</strong><br>${msg.text}`;
-                container.appendChild(div);
-            });
-            container.scrollTop = container.scrollHeight;
-        }
-    </script>
-</body>
-</html>
+            if(pass === "123
