@@ -1,11 +1,11 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ombiri - Secure Chat</title>
-    <!-- Firebase SDK -->
+    
+    <!-- Firebase SDK Compat Scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     
@@ -31,7 +31,7 @@
             border-left: 1px solid #222;
             border-right: 1px solid #222;
         }
-        /* Header */
+        /* Header Bar */
         header {
             padding: 10px 15px;
             background-color: #121212;
@@ -46,15 +46,18 @@
             font-size: 1.3rem;
             letter-spacing: 2px;
         }
-        .logout-btn {
+        .header-actions { display: flex; gap: 8px; }
+        .btn-small {
             background: #222;
-            color: #ff4b4b;
+            color: #ccc;
             border: 1px solid #333;
             padding: 5px 10px;
             border-radius: 6px;
             cursor: pointer;
             font-size: 0.75rem;
         }
+        .btn-small.danger { color: #ff4b4b; }
+        
         /* Navigation / Rooms Switcher */
         .nav-bar {
             display: flex;
@@ -80,6 +83,7 @@
             color: #000;
             font-weight: bold;
         }
+        
         /* Chat Messages Area */
         #chat-messages {
             flex: 1;
@@ -96,12 +100,25 @@
             border-radius: 12px;
             border: 1px solid #2a2a2a;
             max-width: 85%;
+            display: flex;
+            gap: 10px;
+            align-items: flex-start;
         }
         .message-card.me {
             background-color: #1f1f1f;
             border-color: #D4AF37;
             align-self: flex-end;
+            flex-direction: row-reverse;
         }
+        .msg-dp {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 1px solid #444;
+            flex-shrink: 0;
+        }
+        .msg-body { flex: 1; }
         .message-header {
             display: flex;
             justify-content: space-between;
@@ -109,28 +126,14 @@
             margin-bottom: 4px;
         }
         .sender-name {
-            font-size: 0.85rem;
+            font-size: 0.82rem;
             font-weight: bold;
             color: #00adb5;
         }
-        .message-card.me .sender-name {
-            color: #D4AF37;
-        }
-        .timestamp {
-            font-size: 0.7rem;
-            color: #777;
-        }
-        .message-text {
-            font-size: 0.95rem;
-            color: #fff;
-            word-break: break-word;
-            margin-top: 2px;
-        }
-        .message-image {
-            max-width: 100%;
-            border-radius: 8px;
-            margin-top: 6px;
-        }
+        .message-card.me .sender-name { color: #D4AF37; }
+        .timestamp { font-size: 0.68rem; color: #777; }
+        .message-text { font-size: 0.92rem; color: #fff; word-break: break-word; margin-top: 2px; }
+        .message-image { max-width: 100%; border-radius: 8px; margin-top: 6px; }
         .delete-btn {
             background: none;
             border: none;
@@ -140,23 +143,17 @@
             float: right;
             margin-top: 4px;
         }
-        /* Input Footer */
+        
+        /* Footer Controls */
         .chat-footer {
-            padding: 12px;
+            padding: 10px;
             background-color: #121212;
             border-top: 1px solid #222;
             flex-shrink: 0;
         }
-        .input-form {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        .input-row {
-            display: flex;
-            gap: 8px;
-        }
-        input[type="text"] {
+        .input-form { display: flex; flex-direction: column; gap: 8px; }
+        .input-row { display: flex; gap: 8px; align-items: center; }
+        input[type="text"], input[type="password"] {
             flex: 1;
             background-color: #1e1e1e;
             color: #fff;
@@ -166,9 +163,7 @@
             outline: none;
             font-size: 0.95rem;
         }
-        input[type="text"]:focus {
-            border-color: #D4AF37;
-        }
+        input[type="text"]:focus, input[type="password"]:focus { border-color: #D4AF37; }
         .send-btn {
             background-color: #D4AF37;
             color: #000;
@@ -177,19 +172,22 @@
             border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
+            height: 42px;
         }
-        .file-upload-label {
-            font-size: 0.8rem;
-            color: #aaa;
+        .file-label {
+            background: #222;
+            color: #D4AF37;
+            border: 1px solid #333;
+            padding: 8px 12px;
+            border-radius: 8px;
             cursor: pointer;
+            font-size: 1rem;
         }
-        /* Login Overlay */
-        #login-screen {
+
+        /* Screens & Modals */
+        .overlay-screen {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: #000;
             z-index: 100;
             display: flex;
@@ -198,7 +196,7 @@
             align-items: center;
             padding: 20px;
         }
-        .login-box {
+        .modal-box {
             background: #121212;
             padding: 24px;
             border-radius: 12px;
@@ -209,60 +207,88 @@
             flex-direction: column;
             gap: 12px;
         }
-        .login-box h2 {
-            color: #D4AF37;
-            text-align: center;
-            margin-bottom: 10px;
+        .modal-box h2 { color: #D4AF37; text-align: center; }
+        .dp-preview {
+            width: 70px; height: 70px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto;
+            border: 2px solid #D4AF37;
         }
     </style>
 </head>
 <body>
 
-    <!-- Login Screen Overlay -->
-    <div id="login-screen">
-        <div class="login-box">
+    <!-- 1. Login / Registration Screen -->
+    <div id="login-screen" class="overlay-screen">
+        <div class="modal-box">
             <h2>🖤 OMBIRI</h2>
-            <input type="text" id="username-input" placeholder="Enter Your Unique Name">
-            <input type="password" id="password-input" placeholder="Enter Password">
-            <button class="send-btn" style="padding: 12px;" onclick="handleLogin()">Sign In / Register</button>
+            <p style="font-size: 0.8rem; color: #888; text-align: center;">Sign In to Your Personal Account</p>
+            <input type="text" id="username-input" placeholder="Unique Account Name">
+            <input type="password" id="password-input" placeholder="Password">
+            <button class="send-btn" onclick="handleLogin()">Sign In / Register</button>
             <p id="login-error" style="color: #ff4b4b; font-size: 0.85rem; text-align: center;"></p>
         </div>
     </div>
 
-    <!-- Main App Layout -->
+    <!-- 2. Personal Account & DP Screen -->
+    <div id="profile-screen" class="overlay-screen" style="display: none;">
+        <div class="modal-box">
+            <h2>👤 Personal Account</h2>
+            <img id="my-dp-preview" src="https://i.imgur.com/6VBx3io.png" class="dp-preview">
+            <p id="account-name-display" style="text-align: center; font-weight: bold; color: #00adb5;"></p>
+            
+            <label style="font-size: 0.8rem; color: #aaa;">Upload / Change Display Picture (DP):</label>
+            <input type="file" id="dp-input" accept="image/*" style="color: #fff;">
+            
+            <button class="send-btn" onclick="saveProfileDP()">Save Profile DP</button>
+            <button class="btn-small" onclick="closeProfileScreen()">Back to Chat</button>
+        </div>
+    </div>
+
+    <!-- 3. Main Fixed App Interface -->
     <div class="app-container">
         <header>
             <div>
                 <h1>🖤 OMBIRI</h1>
                 <p id="room-subtitle" style="font-size: 0.75rem; color: #888; margin-top: 2px;">Total Chat (Team Group)</p>
             </div>
-            <button class="logout-btn" onclick="handleLogout()">Sign Out</button>
+            <div class="header-actions">
+                <button class="btn-small" onclick="openProfileScreen()">⚙️ Account</button>
+                <button class="btn-small danger" onclick="handleLogout()">Sign Out</button>
+            </div>
         </header>
 
-        <!-- Room Navigation Bar -->
+        <!-- Dynamic User & Room Switcher -->
         <div class="nav-bar" id="nav-rooms">
             <button class="nav-btn active" onclick="switchChat('group', this)">💬 Group Chat</button>
         </div>
 
-        <!-- Chat Stream Window -->
+        <!-- Chat Output Container -->
         <div id="chat-messages"></div>
 
-        <!-- Message Input Footer -->
+        <!-- Chat Input Footer -->
         <div class="chat-footer">
             <form class="input-form" onsubmit="sendMessage(event)">
                 <div class="input-row">
+                    <label class="file-label" title="Attach Image">📷<input type="file" id="image-input" accept="image/*" style="display:none;"></label>
                     <input type="text" id="message-input" placeholder="Type a message...">
                     <button type="submit" class="send-btn">Send</button>
                 </div>
-                <input type="file" id="image-input" accept="image/*" class="file-upload-label">
             </form>
         </div>
     </div>
 
     <script>
-        // FIREBASE DATABASE CONNECTION
+        // FULL FIREBASE CONFIGURATION
         const firebaseConfig = {
-            databaseURL: "https://the-final-basamati-default-rtdb.firebaseio.com/" 
+            apiKey: "AIzaSyDummyKeyForOmbiriAppCheck123",
+            authDomain: "the-final-basamati.firebaseapp.com",
+            databaseURL: "https://the-final-basamati-default-rtdb.firebaseio.com/",
+            projectId: "the-final-basamati",
+            storageBucket: "the-final-basamati.appspot.com",
+            messagingSenderId: "1234567890",
+            appId: "1:1234567890:web:abcdef123456"
         };
         
         if (!firebase.apps.length) {
@@ -270,8 +296,10 @@
         }
 
         let currentUser = localStorage.getItem("ombiri_user") || "";
+        let currentDP = localStorage.getItem("ombiri_dp") || "https://i.imgur.com/6VBx3io.png";
         let currentRecipient = "group";
 
+        // Auto-check active session
         if (currentUser) {
             document.getElementById("login-screen").style.display = "none";
             initChat();
@@ -294,8 +322,11 @@
             localStorage.setItem("ombiri_user", name);
             currentUser = name;
             
-            // Register user in Firebase database so others see them for 1v1 chats
-            firebase.database().ref('users/' + name).set({ name: name });
+            // Register account entry in Firebase
+            firebase.database().ref('users/' + name).set({
+                name: name,
+                dp: currentDP
+            });
 
             document.getElementById("login-screen").style.display = "none";
             initChat();
@@ -304,6 +335,36 @@
         function handleLogout() {
             localStorage.removeItem("ombiri_user");
             location.reload();
+        }
+
+        function openProfileScreen() {
+            document.getElementById("account-name-display").innerText = "Account: " + currentUser;
+            document.getElementById("my-dp-preview").src = currentDP;
+            document.getElementById("profile-screen").style.display = "flex";
+        }
+
+        function closeProfileScreen() {
+            document.getElementById("profile-screen").style.display = "none";
+        }
+
+        function saveProfileDP() {
+            const fileInput = document.getElementById("dp-input");
+            if (fileInput.files.length > 0) {
+                const reader = new FileReader();
+                reader.readAsDataURL(fileInput.files[0]);
+                reader.onload = function() {
+                    currentDP = reader.result;
+                    localStorage.setItem("ombiri_dp", currentDP);
+                    document.getElementById("my-dp-preview").src = currentDP;
+                    
+                    // Sync DP across Firebase
+                    firebase.database().ref('users/' + currentUser).update({ dp: currentDP });
+                    alert("Profile DP Updated!");
+                    closeProfileScreen();
+                }
+            } else {
+                closeProfileScreen();
+            }
         }
 
         function switchChat(recipient, btnElement) {
@@ -321,6 +382,7 @@
             loadMessages();
         }
 
+        // Pulls registered members dynamically for 1v1 chats
         function loadUsersAndRooms() {
             firebase.database().ref('users').on('value', (snapshot) => {
                 const navBar = document.getElementById("nav-rooms");
@@ -337,6 +399,7 @@
             });
         }
 
+        // Live Realtime Database Message Listener
         function loadMessages() {
             const dbRef = firebase.database().ref('messages');
             const container = document.getElementById("chat-messages");
@@ -358,18 +421,22 @@
                     if (match) {
                         const isMe = data.sender === currentUser;
                         const cardClass = isMe ? "message-card me" : "message-card";
+                        const userDp = data.dp || "https://i.imgur.com/6VBx3io.png";
                         
                         let imgTag = data.image ? `<img src="${data.image}" class="message-image">` : "";
                         
                         let html = `
                             <div class="${cardClass}">
-                                <div class="message-header">
-                                    <span class="sender-name">${data.sender}</span>
-                                    <span class="timestamp">${data.timestamp}</span>
+                                <img src="${userDp}" class="msg-dp">
+                                <div class="msg-body">
+                                    <div class="message-header">
+                                        <span class="sender-name">${data.sender}</span>
+                                        <span class="timestamp">${data.timestamp}</span>
+                                    </div>
+                                    <div class="message-text">${data.message || ""}</div>
+                                    ${imgTag}
+                                    <button class="delete-btn" onclick="deleteMessage('${msgId}')">Delete 🗑️</button>
                                 </div>
-                                <div class="message-text">${data.message || ""}</div>
-                                ${imgTag}
-                                <button class="delete-btn" onclick="deleteMessage('${msgId}')">Delete 🗑️</button>
                             </div>
                         `;
                         container.innerHTML += html;
@@ -408,6 +475,7 @@
                 recipient: currentRecipient,
                 message: text,
                 image: imageBase64,
+                dp: currentDP,
                 timestamp: timestamp
             });
             document.getElementById("message-input").value = "";
