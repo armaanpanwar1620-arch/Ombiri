@@ -1,2 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ombiri | Private Chat</title>
+    <style>
+        :root {
+            --gold: #D4AF37;
+            --dark-gold: #AA7C11;
+            --black: #000000;
+            --dark-grey: #121212;
+            --light-grey: #1E1E1E;
+            --border-color: #333333;
+            --text-gold: #F3E5AB;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--black);
+            color: #ffffff;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Login Screen */
+        #login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--black);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .login-card {
+            background: var(--dark-grey);
+            border: 1px solid var(--gold);
+            padding: 30px;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 8px 24px rgba(212, 175, 55, 0.15);
+        }
+
+        .login-card h1 {
+            color: var(--gold);
+            font-size: 2rem;
+            margin-bottom: 5px;
+            letter-spacing: 1px;
+        }
+
+        .login-card p.credits {
+            color: var(--dark-gold);
+            font-size: 0.85rem;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            color: var(--text-gold);
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+        }
+
+        .login-card input {
+            width: 100%;
+            padding: 12px 15px;
+            background: var(--light-grey);
+            border: 1px solid var(--border-color);
+            color: #ffffff;
+            border-radius: 8px;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .login-card input:focus {
+            border-color: var(--gold);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--gold), var(--dark-gold));
+            color: var(--black);
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 10px;
+            transition: opacity 0.2s;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        /* Main App Layout */
+        #app-screen {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        header {
+            background: var(--dark-grey);
+            border-bottom: 1px solid var(--border-color);
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h2 {
+            color: var(--gold);
+            font-size: 1.2rem;
+        }
+
+        header .user-info {
+            font-size: 0.85rem;
+            color: var(--text-gold);
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-width: 800px;
+            width: 100%;
+            margin: 0 auto;
+            background: var(--black);
+        }
+
+        .messages-area {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message {
+            max-width: 75%;
+            padding: 10px 14px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .message.incoming {
+            background: var(--dark-grey);
+            color: #ffffff;
+            align-self: flex-start;
+            border: 1px solid var(--border-color);
+        }
+
+        .message.outgoing {
+            background: var(--gold);
+            color: var(--black);
+            align-self: flex-end;
+            font-weight: 500;
+        }
+
+        .message .sender {
+            font-size: 0.75rem;
+            color: var(--dark-gold);
+            margin-bottom: 3px;
+            font-weight: 600;
+        }
+
+        .message.outgoing .sender {
+            color: #4a3b08;
+        }
+
+        .input-bar {
+            padding: 15px 20px;
+            background: var(--dark-grey);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-bar input {
+            flex: 1;
+            padding: 12px 15px;
+            background: var(--light-grey);
+            border: 1px solid var(--border-color);
+            color: #ffffff;
+            border-radius: 24px;
+            outline: none;
+            font-size: 0.95rem;
+        }
+
+        .input-bar input:focus {
+            border-color: var(--gold);
+        }
+
+        .input-bar button {
+            background: var(--gold);
+            color: var(--black);
+            border: none;
+            padding: 0 20px;
+            border-radius: 24px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .error-msg {
+            color: #ff4d4d;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Login Screen -->
+    <div id="login-screen">
+        <div class="login-card">
+            <h1>OMBIRI</h1>
+            <p class="credits">Made by Armaan</p>
+            
+            <div class="input-group">
+                <label>Invite Key</label>
+                <input type="text" id="invite-key" placeholder="Enter invite key" autocomplete="off">
+            </div>
+
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="password" placeholder="Enter password" autocomplete="off">
+            </div>
+
+            <div class="input-group">
+                <label>Your Nickname</label>
+                <input type="text" id="nickname" placeholder="Enter your name" autocomplete="off">
+            </div>
+
+            <button class="btn" onclick="attemptLogin()">Enter Chat</button>
+            <div id="error" class="error-msg">Incorrect invite key or password!</div>
+        </div>
+    </div>
+
+    <!-- App Screen -->
+    <div id="app-screen">
+        <header>
+            <h2>OMBIRI</h2>
+            <div class="user-info" id="display-user">Logged in as: </div>
+        </header>
+
+        <div class="chat-container">
+            <div class="messages-area" id="messages">
+                <div class="message incoming">
+                    <div class="sender">System</div>
+                    Welcome to Ombiri! Messages here are shared live with anyone logged into the room.
+                </div>
+            </div>
+
+            <div class="input-bar">
+                <input type="text" id="msg-input" placeholder="Type a message..." autocomplete="off" onkeypress="handleKeyPress(event)">
+                <button onclick="sendMessage()">Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const CORRECT_KEY = "armaanfriends";
+        const CORRECT_PASS = "123456";
+
+        function attemptLogin() {
+            const key = document.getElementById('invite-key').value.trim();
+            const pass = document.getElementById('password').value.trim();
+            const name = document.getElementById('nickname').value.trim();
+            const errorDiv = document.getElementById('error');
+
+            if (key === CORRECT_KEY && pass === CORRECT_PASS && name !== "") {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('app-screen').style.display = 'flex';
+                document.getElementById('display-user').innerText = "Logged in as: " + name;
+                sessionStorage.setItem('ombiri_user', name);
+            } else {
+                errorDiv.style.display = 'block';
+                if(name === "") {
+                    errorDiv.innerText = "Please enter your nickname!";
+                } else {
+                    errorDiv.innerText = "Incorrect invite key or password!";
+                }
+            }
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('msg-input');
+            const text = input.value.trim();
+            const name = sessionStorage.getItem('ombiri_user') || "Anonymous";
+
+            if (text === "") return;
+
+            const messagesArea = document.getElementById('messages');
+            
+            const msgDiv = document.createElement('div');
+            msgDiv.className = "message outgoing";
+            msgDiv.innerHTML = `<div class="sender">${name}</div>${escapeHtml(text)}`;
+            
+            messagesArea.appendChild(msgDiv);
+            input.value = "";
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+        }
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+    </script>
+</body>
+</html>
 
     
