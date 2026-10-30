@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Ombiri - Luxury Black & Gold 3D Messenger</title>
+    <title>Ombiri - iOS Instagram Edition</title>
 
     <!-- Firebase SDK Compat Scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -11,41 +11,18 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', -apple-system, sans-serif; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Plus Jakarta Sans', sans-serif; }
         
         html, body {
-            background-color: #020203;
-            color: #f5f5f7;
+            background-color: #f2f2f7;
+            color: #1c1c1e;
             width: 100vw;
             height: 100dvh;
             overflow: hidden;
             position: fixed;
         }
 
-        /* Ambient 3D Liquid Gold & Obsidian Glowing Background */
-        .ambient-bg {
-            position: absolute;
-            width: 100%; height: 100%;
-            overflow: hidden;
-            z-index: 0;
-            pointer-events: none;
-        }
-        .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(100px);
-            opacity: 0.35;
-            animation: floatOrb 12s infinite alternate ease-in-out;
-        }
-        .orb-1 { width: 340px; height: 340px; background: #d4af37; top: -60px; left: -50px; }
-        .orb-2 { width: 380px; height: 380px; background: #b8860b; bottom: -80px; right: -60px; animation-delay: -6s; }
-
-        @keyframes floatOrb {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(25px, 35px) scale(1.12); }
-        }
-
-        /* Main Container with 3D Convex Black & Gold Glass Shell */
+        /* App Main Shell - iOS Clean Style */
         .app-container {
             position: relative;
             z-index: 1;
@@ -53,63 +30,56 @@
             max-width: 480px;
             height: 100dvh;
             margin: 0 auto;
-            background: linear-gradient(145deg, rgba(14, 14, 18, 0.85), rgba(5, 5, 8, 0.95));
-            backdrop-filter: blur(40px) saturate(200%);
-            -webkit-backdrop-filter: blur(40px) saturate(200%);
+            background: #ffffff;
             display: flex;
             flex-direction: column;
-            border-left: 1px solid rgba(212, 175, 55, 0.25);
-            border-right: 1px solid rgba(212, 175, 55, 0.25);
-            box-shadow: inset 0 2px 4px rgba(255, 215, 0, 0.2), 0 35px 70px rgba(0, 0, 0, 0.95);
+            border-left: 1px solid #e5e5ea;
+            border-right: 1px solid #e5e5ea;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
         }
 
-        /* Luxury Black & Gold Header */
+        /* Header - Instagram / iOS Minimalist Header */
         header {
-            padding: 14px 18px;
-            background: linear-gradient(180deg, rgba(25, 25, 32, 0.8), rgba(10, 10, 14, 0.6));
-            backdrop-filter: blur(25px);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
+            padding: 12px 16px;
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(60, 60, 67, 0.12);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
             flex-shrink: 0;
         }
         .logo-area h1 {
-            background: linear-gradient(135deg, #ffffff 30%, #d4af37 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-size: 1.35rem;
+            font-size: 1.4rem;
             font-weight: 700;
-            letter-spacing: 0.8px;
+            letter-spacing: -0.5px;
+            color: #000000;
         }
-        .logo-area p { font-size: 0.7rem; color: #b8860b; margin-top: 2px; font-weight: 500; }
-        .header-actions { display: flex; gap: 10px; }
+        .logo-area p { font-size: 0.7rem; color: #8e8e93; font-weight: 500; }
+        .header-actions { display: flex; gap: 8px; }
 
-        /* Convex 3D Gold Action Buttons */
-        .btn-convex {
-            background: linear-gradient(145deg, rgba(212, 175, 55, 0.25), rgba(20, 20, 25, 0.6));
-            color: #ffd700;
-            border: 1px solid rgba(212, 175, 55, 0.4);
-            box-shadow: inset 0 1px 2px rgba(255, 215, 0, 0.4), 0 4px 12px rgba(0, 0, 0, 0.5);
+        /* iOS Round Action Buttons */
+        .btn-ios {
+            background: #f2f2f7;
+            color: #007aff;
+            border: none;
             border-radius: 50%;
-            width: 40px; height: 40px;
+            width: 38px; height: 38px;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer;
+            font-size: 1rem;
             transition: all 0.15s ease;
         }
-        .btn-convex:active {
-            transform: scale(0.92);
-            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.8);
-        }
+        .btn-ios:active { transform: scale(0.92); background: #e5e5ea; }
 
-        /* Status & Direct Messages Bar */
+        /* Instagram Stories / Status Bar */
         .status-bar {
             display: flex;
-            padding: 12px 16px;
+            padding: 12px 14px;
             gap: 14px;
-            background: rgba(10, 10, 14, 0.6);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.15);
+            background: #ffffff;
+            border-bottom: 1px solid #f2f2f7;
             overflow-x: auto;
             flex-shrink: 0;
         }
@@ -118,265 +88,249 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 5px;
+            gap: 4px;
             cursor: pointer;
             flex-shrink: 0;
         }
         .status-ring {
-            width: 56px; height: 56px;
+            width: 62px; height: 62px;
             border-radius: 50%;
-            padding: 3px;
-            background: linear-gradient(135deg, #d4af37, #ffd700, #b8860b);
+            padding: 2.5px;
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
             display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 6px 16px rgba(212, 175, 55, 0.25);
         }
-        .status-ring.group-ring { background: linear-gradient(135deg, #ffd700, #ff8c00); }
-        .status-ring.add-status { background: rgba(255, 255, 255, 0.1); border: 2px dashed #ffd700; }
+        .status-ring.group-ring { background: linear-gradient(135deg, #34c759, #007aff); }
+        .status-ring.add-status { background: #f2f2f7; border: 2px dashed #007aff; }
         .status-img {
             width: 100%; height: 100%;
             border-radius: 50%;
             object-fit: cover;
-            border: 2px solid #050508;
+            border: 2px solid #ffffff;
         }
-        .status-name { font-size: 0.72rem; color: #e5e5ea; max-width: 62px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
+        .status-name { font-size: 0.7rem; color: #3a3a3c; max-width: 62px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
 
-        /* Main Scrollable Chat Area */
+        /* Mirror Search Bar */
+        .search-container {
+            padding: 8px 14px;
+            background: #ffffff;
+            border-bottom: 1px solid #f2f2f7;
+            flex-shrink: 0;
+        }
+        .search-box {
+            display: flex;
+            align-items: center;
+            background: #eef0f3;
+            border-radius: 10px;
+            padding: 6px 12px;
+            gap: 8px;
+        }
+        .search-box input {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 100%;
+            font-size: 0.88rem;
+            color: #1c1c1e;
+        }
+
+        /* Main Messages Container */
         #chat-messages {
             flex: 1;
             padding: 16px;
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            gap: 14px;
-            scroll-behavior: smooth;
+            gap: 12px;
+            background: #fafafa;
         }
 
-        /* 3D Luxury Black & Gold Message Cards */
+        /* iOS Chat Bubble Style */
         .message-card {
-            background: linear-gradient(145deg, rgba(25, 25, 32, 0.7), rgba(12, 12, 16, 0.8));
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 12px 15px;
-            border-radius: 20px;
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            box-shadow: inset 0 1px 2px rgba(255, 215, 0, 0.15), 0 10px 25px rgba(0, 0, 0, 0.6);
-            max-width: 84%;
+            background: #ffffff;
+            padding: 10px 14px;
+            border-radius: 18px;
+            border: 1px solid #e5e5ea;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+            max-width: 82%;
             display: flex;
             gap: 10px;
             align-items: flex-start;
-            animation: slideUp 0.2s ease-out;
         }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
         .message-card.me {
-            background: linear-gradient(135deg, rgba(212, 175, 55, 0.3), rgba(30, 25, 10, 0.7));
-            border-color: rgba(255, 215, 0, 0.5);
+            background: #007aff;
+            color: #ffffff;
+            border-color: #007aff;
             align-self: flex-end;
             flex-direction: row-reverse;
         }
         .msg-dp {
-            width: 38px; height: 38px;
+            width: 34px; height: 34px;
             border-radius: 50%;
             object-fit: cover;
-            border: 1.5px solid rgba(212, 175, 55, 0.5);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
             flex-shrink: 0;
         }
         .msg-body { flex: 1; }
-        .message-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px; gap: 8px; }
-        .sender-name { font-size: 0.8rem; font-weight: 600; color: #ffd700; }
-        .message-card.me .sender-name { color: #ffdf73; }
-        .timestamp { font-size: 0.65rem; color: #a1a1aa; }
-        .message-text { font-size: 0.94rem; color: #ffffff; word-break: break-word; line-height: 1.4; }
-        .message-image { max-width: 100%; border-radius: 12px; margin-top: 8px; border: 1px solid rgba(212, 175, 55, 0.3); }
-        .message-video { max-width: 100%; border-radius: 12px; margin-top: 8px; border: 1px solid rgba(212, 175, 55, 0.3); outline: none; }
-        .voice-player { width: 100%; margin-top: 6px; border-radius: 8px; outline: none; height: 36px; filter: sepia(100%) hue-rotate(5deg) saturate(300%); }
+        .message-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 3px; gap: 8px; }
+        .sender-name { font-size: 0.78rem; font-weight: 600; color: #007aff; }
+        .message-card.me .sender-name { color: #ffffff; }
+        .timestamp { font-size: 0.62rem; color: #8e8e93; }
+        .message-card.me .timestamp { color: rgba(255, 255, 255, 0.8); }
+        .message-text { font-size: 0.92rem; word-break: break-word; line-height: 1.35; }
+        .message-card.me .message-text { color: #ffffff; }
+        .message-image { max-width: 100%; border-radius: 12px; margin-top: 6px; }
+        .voice-player { width: 100%; margin-top: 6px; height: 36px; }
 
-        .msg-footer-row { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; }
-        .delete-btn { background: none; border: none; color: #a1a1aa; cursor: pointer; font-size: 0.72rem; }
-        .delete-btn:hover { color: #ff2d55; }
+        .msg-footer-row { display: flex; justify-content: flex-end; margin-top: 4px; }
+        .delete-btn { background: none; border: none; color: #ff3b30; cursor: pointer; font-size: 0.7rem; font-weight: 500; }
 
-        /* Realtime Typing Indicator */
+        /* Typing Indicator */
         #typing-indicator {
             padding: 2px 18px;
             font-size: 0.72rem;
-            color: #ffd700;
+            color: #007aff;
             font-style: italic;
             min-height: 18px;
+            background: #fafafa;
         }
 
-        /* Emoji Selection Drawer */
+        /* Emoji Drawer */
         #emoji-picker {
             display: none;
-            background: rgba(15, 15, 20, 0.95);
-            backdrop-filter: blur(30px);
-            border-top: 1px solid rgba(212, 175, 55, 0.25);
+            background: #ffffff;
+            border-top: 1px solid #e5e5ea;
             padding: 10px;
             gap: 10px;
             flex-wrap: wrap;
             max-height: 120px;
             overflow-y: auto;
         }
-        .emoji-item { font-size: 1.4rem; cursor: pointer; padding: 4px; transition: transform 0.1s ease; }
-        .emoji-item:active { transform: scale(1.3); }
+        .emoji-item { font-size: 1.4rem; cursor: pointer; padding: 4px; }
 
-        /* Bottom Fixed Convex Input Controls */
+        /* iOS Input Footer */
         .chat-footer {
-            padding: 12px 14px;
-            padding-bottom: calc(12px + env(safe-area-inset-bottom));
-            background: linear-gradient(180deg, rgba(15, 15, 20, 0.85), rgba(5, 5, 8, 0.98));
-            backdrop-filter: blur(35px);
-            border-top: 1px solid rgba(212, 175, 55, 0.25);
+            padding: 10px 14px;
+            padding-bottom: calc(10px + env(safe-area-inset-bottom));
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid rgba(60, 60, 67, 0.12);
             flex-shrink: 0;
-            box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.8);
         }
         .input-row { display: flex; gap: 8px; align-items: center; width: 100%; }
 
         input[type="text"], input[type="password"] {
             flex: 1;
             min-width: 0;
-            background: rgba(255, 255, 255, 0.05);
-            color: #ffffff;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.6);
-            border-radius: 18px;
-            padding: 12px 14px;
+            background: #eef0f3;
+            color: #1c1c1e;
+            border: 1px solid transparent;
+            border-radius: 20px;
+            padding: 10px 14px;
             outline: none;
-            font-size: 0.94rem;
+            font-size: 0.92rem;
         }
-        input[type="text"]:focus, input[type="password"]:focus {
-            border-color: #ffd700;
-            box-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
-        }
+        input[type="text"]:focus { border-color: #007aff; background: #ffffff; }
 
         .send-btn {
-            background: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
-            color: #050508;
-            border: none;
-            padding: 0 16px;
-            border-radius: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            height: 44px;
-            flex-shrink: 0;
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.8), 0 4px 15px rgba(212, 175, 55, 0.4);
-        }
-
-        .danger-btn {
-            background: linear-gradient(135deg, #ff2d55 0%, #ff3b30 100%);
+            background: #007aff;
             color: #ffffff;
             border: none;
             padding: 0 16px;
-            border-radius: 18px;
-            font-weight: 700;
+            border-radius: 20px;
+            font-weight: 600;
             cursor: pointer;
-            height: 44px;
-            width: 100%;
-            box-shadow: 0 4px 15px rgba(255, 45, 85, 0.4);
+            height: 40px;
+            flex-shrink: 0;
         }
 
-        /* Voice Recorder Convex Button */
         .mic-btn {
-            background: linear-gradient(145deg, rgba(212, 175, 55, 0.3), rgba(40, 30, 10, 0.5));
-            color: #ffd700;
-            border: 1px solid rgba(212, 175, 55, 0.4);
-            width: 44px; height: 44px;
-            border-radius: 18px;
+            background: #f2f2f7;
+            color: #007aff;
+            border: none;
+            width: 40px; height: 40px;
+            border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
             cursor: pointer; font-size: 1.1rem;
             flex-shrink: 0;
         }
-        .mic-btn.recording {
-            animation: pulseRecord 1s infinite alternate;
-            background: #ff2d55;
-            color: #fff;
-            border-color: #ff2d55;
-        }
-        @keyframes pulseRecord { from { transform: scale(1); } to { transform: scale(1.12); } }
+        .mic-btn.recording { background: #ff3b30; color: #ffffff; animation: pulseRecord 1s infinite alternate; }
+        @keyframes pulseRecord { from { transform: scale(1); } to { transform: scale(1.1); } }
 
-        /* Login, Settings & Status Overlays */
+        /* Modals & Overlays */
         .overlay-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(2, 2, 3, 0.95);
-            backdrop-filter: blur(30px);
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(15px);
             z-index: 300;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             padding: 20px;
         }
         .modal-box {
-            background: linear-gradient(145deg, rgba(25, 25, 32, 0.95), rgba(10, 10, 14, 0.95));
-            backdrop-filter: blur(40px);
-            padding: 28px;
-            border-radius: 24px;
-            border: 1px solid rgba(212, 175, 55, 0.4);
-            box-shadow: inset 0 1px 2px rgba(255, 215, 0, 0.3), 0 25px 60px rgba(0, 0, 0, 0.95);
-            width: 100%; max-width: 360px;
-            display: flex; flex-direction: column; gap: 16px;
+            background: #ffffff;
+            padding: 24px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            width: 100%; max-width: 340px;
+            display: flex; flex-direction: column; gap: 14px;
         }
 
-        #status-viewer, #settings-modal {
+        #todo-modal, #settings-modal, #status-viewer {
             display: none;
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.92);
-            backdrop-filter: blur(25px);
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(15px);
             z-index: 200;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             padding: 20px;
         }
-        .status-modal-content {
-            background: rgba(20, 20, 26, 0.9);
-            border: 1px solid rgba(212, 175, 55, 0.4);
-            border-radius: 20px;
-            padding: 24px;
-            width: 100%; max-width: 340px;
-            text-align: center;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
+        .todo-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid #f2f2f7; }
     </style>
 </head>
 <body>
 
-    <div class="ambient-bg">
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-    </div>
-
-    <!-- Security Passcode & Codename Screen -->
+    <!-- Security Login Screen -->
     <div id="login-screen" class="overlay-screen">
         <div class="modal-box">
-            <h2 style="text-align: center; color: #ffd700; letter-spacing: 1px;">Ombiri</h2>
-            <p style="font-size: 0.8rem; color: #b8860b; text-align: center; font-weight: 500;">Secure Access Gateway</p>
-            <input type="text" id="login-name-input" placeholder="Enter Agent Codename">
+            <h2 style="text-align: center; color: #007aff;">Ombiri</h2>
+            <p style="font-size: 0.8rem; color: #8e8e93; text-align: center;">Enter Codename & Security Passcode</p>
+            <input type="text" id="login-name-input" placeholder="Codename">
             <input type="password" id="login-pass-input" placeholder="Passcode (162012)">
-            <button class="send-btn" onclick="verifyLogin()" style="width: 100%; height: 46px;">Authorize Node</button>
-            <p id="login-error" style="color: #ff2d55; font-size: 0.82rem; text-align: center;"></p>
+            <button class="send-btn" onclick="verifyLogin()" style="width: 100%; height: 44px;">Enter App</button>
+            <p id="login-error" style="color: #ff3b30; font-size: 0.82rem; text-align: center;"></p>
         </div>
     </div>
 
-    <!-- Settings & Personal ID Management Modal -->
+    <!-- To-Do Feature Modal -->
+    <div id="todo-modal" onclick="closeTodoModal()">
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <h3 style="color: #1c1c1e; text-align: center;">Tactical Tasks / To-Do</h3>
+            <div id="todo-list" style="max-height: 200px; overflow-y: auto;"></div>
+            <div style="display: flex; gap: 8px;">
+                <input type="text" id="new-todo-input" placeholder="New task...">
+                <button class="send-btn" onclick="addTodoTask()">Add</button>
+            </div>
+            <button class="send-btn" onclick="closeTodoModal()" style="background: #e5e5ea; color: #000;">Close</button>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
     <div id="settings-modal" onclick="closeSettingsModal()">
-        <div class="status-modal-content" onclick="event.stopPropagation()">
-            <h3 style="color: #ffd700;">Agent Settings</h3>
-            <p style="font-size: 0.85krem; color: #a1a1aa;">Active Codename: <span id="settings-username" style="color:#fff; font-weight:700;"></span></p>
-            <hr style="border: 0; border-top: 1px solid rgba(212,175,55,0.2);">
-            <button class="danger-btn" onclick="deletePersonalAccount()">Delete Personal ID & Account</button>
-            <button class="send-btn" onclick="closeSettingsModal()" style="width: 100%;">Close Settings</button>
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <h3 style="color: #1c1c1e; text-align: center;">Settings</h3>
+            <p style="font-size: 0.85rem; color: #8e8e93; text-align: center;">Active User: <span id="settings-username" style="color:#007aff; font-weight:700;"></span></p>
+            <button onclick="deletePersonalAccount()" style="background:#ff3b30; color:#fff; border:none; padding:12px; border-radius:14px; font-weight:600; cursor:pointer;">Delete Personal Account</button>
+            <button class="send-btn" onclick="closeSettingsModal()" style="background: #e5e5ea; color: #000;">Close</button>
         </div>
     </div>
 
-    <!-- Status Viewer Modal (Supports text, photo, or video) -->
+    <!-- Status Viewer Modal -->
     <div id="status-viewer" onclick="closeStatusViewer()">
-        <div class="status-modal-content" onclick="event.stopPropagation()">
-            <h3 id="view-status-user" style="color: #ffd700;">Status</h3>
-            <div id="status-media-container"></div>
-            <p id="view-status-text" style="color: #fff; font-size: 1rem;"></p>
+        <div class="modal-box" onclick="event.stopPropagation()">
+            <h3 id="view-status-user" style="color: #007aff; text-align: center;">Status</h3>
+            <div id="status-media-container" style="text-align: center;"></div>
             <button class="send-btn" onclick="closeStatusViewer()" style="width: 100%;">Close Story</button>
         </div>
     </div>
@@ -389,12 +343,13 @@
                 <p id="room-subtitle">Encrypted Group Channel</p>
             </div>
             <div class="header-actions">
-                <button class="btn-convex" onclick="openSettingsModal()" title="Settings & ID Management">⚙️</button>
-                <button class="btn-convex" onclick="handleLogout()" title="Disconnect Gateway">🚪</button>
+                <button class="btn-ios" onclick="openTodoModal()" title="To-Do List">✅</button>
+                <button class="btn-ios" onclick="openSettingsModal()" title="Settings">⚙️</button>
+                <button class="btn-ios" onclick="handleLogout()" title="Logout">🚪</button>
             </div>
         </header>
 
-        <!-- Status & Direct Messages Bar -->
+        <!-- Instagram Stories Bar -->
         <div class="status-bar" id="status-stories">
             <div class="status-item" onclick="switchChat('group', this)">
                 <div class="status-ring group-ring">
@@ -402,11 +357,19 @@
                 </div>
                 <span class="status-name">Group</span>
             </div>
-            <div class="status-item" onclick="postStatusPrompt()">
+            <div class="status-item" onclick="postImageVideoStatus()">
                 <div class="status-ring add-status">
-                    <span style="font-size: 1.4rem; color: #ffd700;">+</span>
+                    <span style="font-size: 1.4rem; color: #007aff;">+</span>
                 </div>
-                <span class="status-name">Add Status</span>
+                <span class="status-name">Add Story</span>
+            </div>
+        </div>
+
+        <!-- Mirror Search Bar -->
+        <div class="search-container">
+            <div class="search-box">
+                <span>🔍</span>
+                <input type="text" id="search-input" placeholder="Search messages..." oninput="filterMessages()">
             </div>
         </div>
 
@@ -422,19 +385,17 @@
             <span class="emoji-item" onclick="addEmoji('❤️')">❤️</span>
             <span class="emoji-item" onclick="addEmoji('🔥')">🔥</span>
             <span class="emoji-item" onclick="addEmoji('😂')">😂</span>
-            <span class="emoji-item" onclick="addEmoji('👑')">👑</span>
+            <span class="emoji-item" onclick="addEmoji('🫡')">🫡</span>
             <span class="emoji-item" onclick="addEmoji('🚀')">🚀</span>
-            <span class="emoji-item" onclick="addEmoji('⚠️')">⚠️</span>
-            <span class="emoji-item" onclick="addEmoji('💯')">💯</span>
         </div>
 
         <!-- Chat Input Footer -->
         <div class="chat-footer">
             <form onsubmit="sendMessage(event)">
                 <div class="input-row">
-                    <button type="button" class="btn-convex" onclick="toggleEmojiPicker()">😊</button>
-                    <label class="btn-convex" title="Attach Image">📷<input type="file" id="image-input" accept="image/*" style="display:none;"></label>
-                    <input type="text" id="message-input" placeholder="Message channel..." oninput="handleTyping()" onfocus="scrollToBottom()">
+                    <button type="button" class="btn-ios" onclick="toggleEmojiPicker()">😊</button>
+                    <label class="btn-ios" title="Attach Image">📷<input type="file" id="image-input" accept="image/*" style="display:none;"></label>
+                    <input type="text" id="message-input" placeholder="Message..." oninput="handleTyping()" onfocus="scrollToBottom()">
                     <button type="button" id="mic-btn" class="mic-btn" onclick="toggleVoiceRecord()">🎙️</button>
                     <button type="submit" class="send-btn">Send</button>
                 </div>
@@ -443,7 +404,7 @@
     </div>
 
     <script>
-        // GOOGLE FIREBASE CONFIGURATION
+        // FIREBASE CONFIGURATION
         const firebaseConfig = {
             apiKey: "AIzaSyAgHkq2jIi82FSN5Lsz...",
             authDomain: "ombiri.firebaseapp.com",
@@ -464,6 +425,7 @@
         let mediaRecorder = null;
         let audioChunks = [];
         let isRecording = false;
+        let allMessages = [];
 
         if (currentUser) {
             document.getElementById("login-screen").style.display = "none";
@@ -476,11 +438,11 @@
             const errorElement = document.getElementById("login-error");
 
             if (passInput !== "162012") {
-                errorElement.innerText = "Access Denied: Invalid Passcode (162012)";
+                errorElement.innerText = "Invalid Passcode (162012)";
                 return;
             }
             if (!nameInput) {
-                errorElement.innerText = "Please enter your agent codename!";
+                errorElement.innerText = "Enter codename!";
                 return;
             }
 
@@ -505,14 +467,49 @@
         }
 
         function deletePersonalAccount() {
-            if (confirm("Are you sure you want to permanently delete your Personal ID and Account data? This action cannot be undone.")) {
-                // Remove user profile and status from Firebase
+            if (confirm("Permanently delete your account data?")) {
                 firebase.database().ref('users_ombiri/' + currentUser).remove();
                 firebase.database().ref('status_ombiri/' + currentUser).remove();
                 localStorage.removeItem("ombiri_user");
-                alert("Account and Personal ID deleted successfully.");
                 location.reload();
             }
+        }
+
+        function openTodoModal() {
+            document.getElementById("todo-modal").style.display = "flex";
+            loadTodos();
+        }
+
+        function closeTodoModal() {
+            document.getElementById("todo-modal").style.display = "none";
+        }
+
+        function loadTodos() {
+            firebase.database().ref('todos_ombiri/' + currentUser).on('value', snapshot => {
+                const container = document.getElementById("todo-list");
+                container.innerHTML = "";
+                snapshot.forEach(child => {
+                    const todo = child.val();
+                    container.innerHTML += `
+                        <div class="todo-item">
+                            <span>${todo.text}</span>
+                            <button onclick="deleteTodo('${child.key}')" style="border:none; background:none; color:#ff3b30; cursor:pointer;">✕</button>
+                        </div>
+                    `;
+                });
+            });
+        }
+
+        function addTodoTask() {
+            const input = document.getElementById("new-todo-input");
+            if (input.value.trim()) {
+                firebase.database().ref('todos_ombiri/' + currentUser).push({ text: input.value.trim() });
+                input.value = "";
+            }
+        }
+
+        function deleteTodo(key) {
+            firebase.database().ref('todos_ombiri/' + currentUser + '/' + key).remove();
         }
 
         function switchChat(recipient, el) {
@@ -538,11 +535,11 @@
                         </div>
                         <span class="status-name">Group</span>
                     </div>
-                    <div class="status-item" onclick="postStatusPrompt()">
+                    <div class="status-item" onclick="postImageVideoStatus()">
                         <div class="status-ring add-status">
-                            <span style="font-size: 1.4rem; color: #ffd700;">+</span>
+                            <span style="font-size: 1.4rem; color: #007aff;">+</span>
                         </div>
-                        <span class="status-name">Add Status</span>
+                        <span class="status-name">Add Story</span>
                     </div>
                 `;
                 
@@ -551,9 +548,9 @@
                     if (user && user.name) {
                         firebase.database().ref('status_ombiri/' + user.name).once('value', (sSnap) => {
                             const statusData = sSnap.val();
-                            if (statusData) {
+                            if (statusData && statusData.media) {
                                 html += `
-                                    <div class="status-item" onclick='viewStatus(${JSON.stringify(user.name)}, ${JSON.stringify(statusData.text || "")}, ${JSON.stringify(statusData.media || null)}, ${JSON.stringify(statusData.mediaType || "")})'>
+                                    <div class="status-item" onclick='viewStatus(${JSON.stringify(user.name)}, ${JSON.stringify(statusData.media)}, ${JSON.stringify(statusData.mediaType)})'>
                                         <div class="status-ring">
                                             <img src="${user.dp || 'https://i.imgur.com/6VBx3io.png'}" class="status-img">
                                         </div>
@@ -568,8 +565,8 @@
             });
         }
 
-        function postStatusPrompt() {
-            const statusText = prompt("Enter status text (optional):");
+        // Strict Photo & Video Story Only
+        function postImageVideoStatus() {
             const mediaInput = document.createElement('input');
             mediaInput.type = 'file';
             mediaInput.accept = 'image/*,video/*';
@@ -581,87 +578,79 @@
                     reader.readAsDataURL(file);
                     reader.onload = function() {
                         firebase.database().ref('status_ombiri/' + currentUser).set({
-                            text: statusText || "",
                             media: reader.result,
                             mediaType: isVideo ? 'video' : 'image',
                             timestamp: Date.now()
                         });
-                        alert("Photo/Video Status posted successfully!");
+                        alert("Story uploaded!");
                     };
-                } else if (statusText) {
-                    firebase.database().ref('status_ombiri/' + currentUser).set({
-                        text: statusText,
-                        media: null,
-                        mediaType: "",
-                        timestamp: Date.now()
-                    });
-                    alert("Text Status posted successfully!");
                 }
             };
             mediaInput.click();
         }
 
-        function viewStatus(username, text, media, mediaType) {
-            document.getElementById("view-status-user").innerText = username + "'s Status";
-            document.getElementById("view-status-text").innerText = text;
+        function viewStatus(username, media, mediaType) {
+            document.getElementById("view-status-user").innerText = username + "'s Story";
             const mediaContainer = document.getElementById("status-media-container");
-            mediaContainer.innerHTML = "";
-
-            if (media) {
-                if (mediaType === 'video') {
-                    mediaContainer.innerHTML = `<video src="${media}" controls autoplay class="message-video" style="max-height:250px; width:100%;"></video>`;
-                } else {
-                    mediaContainer.innerHTML = `<img src="${media}" style="max-height:250px; width:100%; object-fit:contain; border-radius:12px;">`;
-                }
-            }
-
+            mediaContainer.innerHTML = mediaType === 'video' 
+                ? `<video src="${media}" controls autoplay style="max-height:280px; width:100%; border-radius:12px;"></video>`
+                : `<img src="${media}" style="max-height:280px; width:100%; object-fit:contain; border-radius:12px;">`;
             document.getElementById("status-viewer").style.display = "flex";
         }
 
-        function closeStatusViewer() {
-            document.getElementById("status-viewer").style.display = "none";
-        }
+        function closeStatusViewer() { document.getElementById("status-viewer").style.display = "none"; }
 
         function loadMessages() {
-            const container = document.getElementById("chat-messages");
             firebase.database().ref('messages_ombiri').on('value', (snapshot) => {
-                container.innerHTML = "";
+                allMessages = [];
                 snapshot.forEach((child) => {
-                    const data = child.val();
-                    const msgId = child.key;
+                    allMessages.push({ id: child.key, ...child.val() });
+                });
+                renderMessages(allMessages);
+            });
+        }
 
-                    let match = false;
-                    if (currentRecipient === 'group' && data.recipient === 'group') match = true;
-                    else if ((data.sender === currentUser && data.recipient === currentRecipient) ||
-                             (data.sender === currentRecipient && data.recipient === currentUser)) match = true;
+        function renderMessages(msgs) {
+            const container = document.getElementById("chat-messages");
+            container.innerHTML = "";
+            msgs.forEach((data) => {
+                let match = false;
+                if (currentRecipient === 'group' && data.recipient === 'group') match = true;
+                else if ((data.sender === currentUser && data.recipient === currentRecipient) ||
+                         (data.sender === currentRecipient && data.recipient === currentUser)) match = true;
 
-                    if (match) {
-                        const isMe = data.sender === currentUser;
-                        const cardClass = isMe ? "message-card me" : "message-card";
-                        const imgTag = data.image ? `<img src="${data.image}" class="message-image">` : "";
-                        const audioTag = data.audio ? `<audio src="${data.audio}" controls class="voice-player"></audio>` : "";
+                if (match) {
+                    const isMe = data.sender === currentUser;
+                    const cardClass = isMe ? "message-card me" : "message-card";
+                    const imgTag = data.image ? `<img src="${data.image}" class="message-image">` : "";
+                    const audioTag = data.audio ? `<audio src="${data.audio}" controls class="voice-player"></audio>` : "";
 
-                        container.innerHTML += `
-                            <div class="${cardClass}">
-                                <img src="${data.dp || 'https://i.imgur.com/6VBx3io.png'}" class="msg-dp">
-                                <div class="msg-body">
-                                    <div class="message-header">
-                                        <span class="sender-name">${data.sender}</span>
-                                        <span class="timestamp">${data.timestamp}</span>
-                                    </div>
-                                    <div class="message-text">${data.message || ""}</div>
-                                    ${imgTag}
-                                    ${audioTag}
-                                    <div class="msg-footer-row">
-                                        <button class="delete-btn" onclick="deleteMessage('${msgId}')">Delete</button>
-                                    </div>
+                    container.innerHTML += `
+                        <div class="${cardClass}">
+                            <img src="${data.dp || 'https://i.imgur.com/6VBx3io.png'}" class="msg-dp">
+                            <div class="msg-body">
+                                <div class="message-header">
+                                    <span class="sender-name">${data.sender}</span>
+                                    <span class="timestamp">${data.timestamp}</span>
+                                </div>
+                                <div class="message-text">${data.message || ""}</div>
+                                ${imgTag}
+                                ${audioTag}
+                                <div class="msg-footer-row">
+                                    <button class="delete-btn" onclick="deleteMessage('${data.id}')">Delete</button>
                                 </div>
                             </div>
-                        `;
-                    }
-                });
-                scrollToBottom();
+                        </div>
+                    `;
+                }
             });
+            scrollToBottom();
+        }
+
+        function filterMessages() {
+            const query = document.getElementById("search-input").value.toLowerCase();
+            const filtered = allMessages.filter(m => (m.message && m.message.toLowerCase().includes(query)));
+            renderMessages(filtered);
         }
 
         function scrollToBottom() {
@@ -677,8 +666,7 @@
         }
 
         function addEmoji(emoji) {
-            const input = document.getElementById("message-input");
-            input.value += emoji;
+            document.getElementById("message-input").value += emoji;
             toggleEmojiPicker();
         }
 
@@ -713,16 +701,12 @@
                         const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
                         const reader = new FileReader();
                         reader.readAsDataURL(audioBlob);
-                        reader.onloadend = () => {
-                            pushMessage("", null, reader.result);
-                        };
+                        reader.onloadend = () => { pushMessage("", null, reader.result); };
                     };
                     mediaRecorder.start();
                     isRecording = true;
                     micBtn.classList.add("recording");
-                } catch (err) {
-                    alert("Microphone access is required to record voice notes.");
-                }
+                } catch (err) { alert("Microphone required!"); }
             } else {
                 mediaRecorder.stop();
                 isRecording = false;
@@ -774,4 +758,3 @@
     </script>
 </body>
 </html>
-
