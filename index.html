@@ -37,8 +37,8 @@
             opacity: 0.35;
             animation: floatOrb 12s infinite alternate ease-in-out;
         }
-        .orb-1 { width: 340px; height: 340px; background: #d4af37; top: -60px; left: -50px; } /* Rich Gold */
-        .orb-2 { width: 380px; height: 380px; background: #b8860b; bottom: -80px; right: -60px; animation-delay: -6s; } /* Dark Gold */
+        .orb-1 { width: 340px; height: 340px; background: #d4af37; top: -60px; left: -50px; }
+        .orb-2 { width: 380px; height: 380px; background: #b8860b; bottom: -80px; right: -60px; animation-delay: -6s; }
 
         @keyframes floatOrb {
             0% { transform: translate(0, 0) scale(1); }
@@ -131,6 +131,7 @@
             box-shadow: 0 6px 16px rgba(212, 175, 55, 0.25);
         }
         .status-ring.group-ring { background: linear-gradient(135deg, #ffd700, #ff8c00); }
+        .status-ring.add-status { background: rgba(255, 255, 255, 0.1); border: 2px dashed #ffd700; }
         .status-img {
             width: 100%; height: 100%;
             border-radius: 50%;
@@ -242,7 +243,7 @@
             outline: none;
             font-size: 0.94rem;
         }
-        input[type="text"]:focus {
+        input[type="text"]:focus, input[type="password"]:focus {
             border-color: #ffd700;
             box-shadow: 0 0 12px rgba(255, 215, 0, 0.4);
         }
@@ -279,13 +280,13 @@
         }
         @keyframes pulseRecord { from { transform: scale(1); } to { transform: scale(1.12); } }
 
-        /* Fullscreen Glass Login Screen */
+        /* Login & Status Overlays */
         .overlay-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(2, 2, 3, 0.9);
+            background: rgba(2, 2, 3, 0.95);
             backdrop-filter: blur(30px);
-            z-index: 100;
+            z-index: 300;
             display: flex; flex-direction: column; justify-content: center; align-items: center;
             padding: 20px;
         }
@@ -299,6 +300,28 @@
             width: 100%; max-width: 360px;
             display: flex; flex-direction: column; gap: 16px;
         }
+
+        #status-viewer {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(25px);
+            z-index: 200;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .status-modal-content {
+            background: rgba(20, 20, 26, 0.9);
+            border: 1px solid rgba(212, 175, 55, 0.4);
+            border-radius: 20px;
+            padding: 24px;
+            width: 100%; max-width: 340px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.9);
+        }
     </style>
 </head>
 <body>
@@ -308,15 +331,24 @@
         <div class="orb orb-2"></div>
     </div>
 
-    <!-- Login Overlay -->
+    <!-- Security Passcode & Codename Screen -->
     <div id="login-screen" class="overlay-screen">
         <div class="modal-box">
             <h2 style="text-align: center; color: #ffd700; letter-spacing: 1px;">Ombiri</h2>
-            <p style="font-size: 0.8rem; color: #b8860b; text-align: center; font-weight: 500;">Secure Black & Gold Gateway</p>
-            <input type="text" id="username-input" placeholder="Codename">
-            <input type="password" id="password-input" placeholder="Passcode (123456)">
-            <button class="send-btn" onclick="handleLogin()" style="width: 100%; height: 46px;">Connect Node</button>
+            <p style="font-size: 0.8rem; color: #b8860b; text-align: center; font-weight: 500;">Secure Access Gateway</p>
+            <input type="text" id="login-name-input" placeholder="Enter Agent Codename">
+            <input type="password" id="login-pass-input" placeholder="Passcode (162012)">
+            <button class="send-btn" onclick="verifyLogin()" style="width: 100%; height: 46px;">Authorize Node</button>
             <p id="login-error" style="color: #ff2d55; font-size: 0.82rem; text-align: center;"></p>
+        </div>
+    </div>
+
+    <!-- Status Viewer Modal -->
+    <div id="status-viewer" onclick="closeStatusViewer()">
+        <div class="status-modal-content" onclick="event.stopPropagation()">
+            <h3 id="view-status-user" style="color: #ffd700; margin-bottom: 10px;">Status</h3>
+            <p id="view-status-text" style="color: #fff; font-size: 1.1rem; margin-bottom: 20px;"></p>
+            <button class="send-btn" onclick="closeStatusViewer()" style="width: 100%;">Close</button>
         </div>
     </div>
 
@@ -328,7 +360,7 @@
                 <p id="room-subtitle">Encrypted Group Channel</p>
             </div>
             <div class="header-actions">
-                <button class="btn-convex" onclick="handleLogout()" title="Disconnect">🚪</button>
+                <button class="btn-convex" onclick="handleLogout()" title="Disconnect Gateway">🚪</button>
             </div>
         </header>
 
@@ -339,6 +371,12 @@
                     <img src="https://i.imgur.com/6VBx3io.png" class="status-img">
                 </div>
                 <span class="status-name">Group</span>
+            </div>
+            <div class="status-item" onclick="postStatusPrompt()">
+                <div class="status-ring add-status">
+                    <span style="font-size: 1.4rem; color: #ffd700;">+</span>
+                </div>
+                <span class="status-name">Add Status</span>
             </div>
         </div>
 
@@ -397,29 +435,28 @@
         let audioChunks = [];
         let isRecording = false;
 
+        // Check if user is already authenticated in this session
         if (currentUser) {
             document.getElementById("login-screen").style.display = "none";
             initChat();
         }
 
-        function handleLogin() {
-            const name = document.getElementById("username-input").value.trim();
-            const pass = document.getElementById("password-input").value.trim();
+        function verifyLogin() {
+            const nameInput = document.getElementById("login-name-input").value.trim();
+            const passInput = document.getElementById("login-pass-input").value.trim();
             const errorElement = document.getElementById("login-error");
 
-            if (pass !== "123456") {
-                errorElement.innerText = "Invalid security passcode!";
+            if (passInput !== "162012") {
+                errorElement.innerText = "Access Denied: Invalid Passcode (162012)";
                 return;
             }
-            if (!name) {
-                errorElement.innerText = "Please enter a codename!";
+            if (!nameInput) {
+                errorElement.innerText = "Please enter your agent codename!";
                 return;
             }
 
-            localStorage.setItem("ombiri_user", name);
-            currentUser = name;
-
-            firebase.database().ref('users_ombiri/' + name).set({ name: name, dp: currentDP });
+            currentUser = nameInput;
+            localStorage.setItem("ombiri_user", currentUser);
             document.getElementById("login-screen").style.display = "none";
             initChat();
         }
@@ -436,6 +473,7 @@
         }
 
         function initChat() {
+            firebase.database().ref('users_ombiri/' + currentUser).set({ name: currentUser, dp: currentDP });
             loadUsers();
             loadMessages();
             listenForTyping();
@@ -451,22 +489,55 @@
                         </div>
                         <span class="status-name">Group</span>
                     </div>
+                    <div class="status-item" onclick="postStatusPrompt()">
+                        <div class="status-ring add-status">
+                            <span style="font-size: 1.4rem; color: #ffd700;">+</span>
+                        </div>
+                        <span class="status-name">Add Status</span>
+                    </div>
                 `;
+                
                 snapshot.forEach((child) => {
                     const user = child.val();
-                    if (user && user.name && user.name !== currentUser) {
-                        html += `
-                            <div class="status-item" onclick="switchChat('${user.name}', this)">
-                                <div class="status-ring">
-                                    <img src="${user.dp || 'https://i.imgur.com/6VBx3io.png'}" class="status-img">
-                                </div>
-                                <span class="status-name">${user.name}</span>
-                            </div>
-                        `;
+                    if (user && user.name) {
+                        firebase.database().ref('status_ombiri/' + user.name).once('value', (sSnap) => {
+                            const statusData = sSnap.val();
+                            if (statusData) {
+                                html += `
+                                    <div class="status-item" onclick="viewStatus('${user.name}', '${statusData.text}')">
+                                        <div class="status-ring">
+                                            <img src="${user.dp || 'https://i.imgur.com/6VBx3io.png'}" class="status-img">
+                                        </div>
+                                        <span class="status-name">${user.name}</span>
+                                    </div>
+                                `;
+                                bar.innerHTML = html;
+                            }
+                        });
                     }
                 });
-                bar.innerHTML = html;
             });
+        }
+
+        function postStatusPrompt() {
+            const statusText = prompt("Enter your tactical status update:");
+            if (statusText && statusText.trim() !== "") {
+                firebase.database().ref('status_ombiri/' + currentUser).set({
+                    text: statusText.trim(),
+                    timestamp: Date.now()
+                });
+                alert("Status posted successfully!");
+            }
+        }
+
+        function viewStatus(username, text) {
+            document.getElementById("view-status-user").innerText = username + "'s Status";
+            document.getElementById("view-status-text").innerText = text;
+            document.getElementById("status-viewer").style.display = "flex";
+        }
+
+        function closeStatusViewer() {
+            document.getElementById("status-viewer").style.display = "none";
         }
 
         function loadMessages() {
