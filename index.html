@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Ombiri - 3D Glass Messenger</title>
+    <title>Ombiri - iOS Glass Messenger</title>
     
     <!-- Firebase SDK Compat Scripts -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
@@ -17,7 +17,7 @@
             background-color: #030305;
             color: #f5f5f7;
             width: 100vw;
-            height: 100dvh; /* Fixed for Mobile Viewports */
+            height: 100dvh;
             overflow: hidden;
             position: fixed;
         }
@@ -33,17 +33,16 @@
         .orb {
             position: absolute;
             border-radius: 50%;
-            filter: blur(90px);
-            opacity: 0.45;
-            animation: floatOrb 12s infinite alternate ease-in-out;
+            filter: blur(100px);
+            opacity: 0.4;
+            animation: floatOrb 10s infinite alternate ease-in-out;
         }
-        .orb-1 { width: 280px; height: 280px; background: #0071e3; top: -50px; left: -40px; }
-        .orb-2 { width: 320px; height: 320px; background: #af52de; bottom: -80px; right: -50px; animation-delay: -4s; }
-        .orb-3 { width: 220px; height: 220px; background: #ff2d55; top: 40%; left: 30%; animation-delay: -8s; }
+        .orb-1 { width: 300px; height: 300px; background: #0071e3; top: -60px; left: -50px; }
+        .orb-2 { width: 340px; height: 340px; background: #af52de; bottom: -80px; right: -60px; animation-delay: -5s; }
 
         @keyframes floatOrb {
             0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(30px, 40px) scale(1.15); }
+            100% { transform: translate(25px, 35px) scale(1.1); }
         }
 
         /* Main Container with 3D Glass Shell */
@@ -52,28 +51,28 @@
             z-index: 1;
             width: 100%;
             max-width: 480px;
-            height: 100dvh; /* Strict Mobile Height */
+            height: 100dvh;
             margin: 0 auto;
-            background: rgba(18, 18, 24, 0.55);
-            backdrop-filter: blur(35px) saturate(180%);
-            -webkit-backdrop-filter: blur(35px) saturate(180%);
+            background: rgba(18, 18, 24, 0.6);
+            backdrop-filter: blur(40px) saturate(190%);
+            -webkit-backdrop-filter: blur(40px) saturate(190%);
             display: flex;
             flex-direction: column;
             border-left: 1px solid rgba(255, 255, 255, 0.12);
             border-right: 1px solid rgba(255, 255, 255, 0.12);
-            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.2), 0 30px 60px rgba(0, 0, 0, 0.8);
+            box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.25), 0 30px 60px rgba(0, 0, 0, 0.85);
         }
         
-        /* 3D Glass Header */
+        /* iOS Glass Header */
         header {
             padding: 14px 18px;
-            background: rgba(30, 30, 40, 0.45);
-            backdrop-filter: blur(20px);
+            background: rgba(30, 30, 42, 0.5);
+            backdrop-filter: blur(25px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             flex-shrink: 0;
         }
         .logo-area h1 {
@@ -81,7 +80,7 @@
             font-size: 1.25rem;
             font-weight: 700;
             letter-spacing: 0.5px;
-            text-shadow: 0 2px 10px rgba(255, 255, 255, 0.3);
+            text-shadow: 0 2px 10px rgba(255, 255, 255, 0.25);
         }
         .logo-area p { font-size: 0.7rem; color: #a1a1aa; margin-top: 1px; }
         .header-actions { display: flex; gap: 8px; }
@@ -99,12 +98,12 @@
         }
         .btn-icon:active { transform: scale(0.92); }
 
-        /* Instagram-Style Active Status Glass Bar */
+        /* Instagram-Style Active Status Stories Bar */
         .insta-bar {
             display: flex;
             padding: 12px 16px;
             gap: 14px;
-            background: rgba(15, 15, 20, 0.35);
+            background: rgba(15, 15, 20, 0.4);
             border-bottom: 1px solid rgba(255, 255, 255, 0.08);
             overflow-x: auto;
             flex-shrink: 0;
@@ -136,7 +135,7 @@
         }
         .story-name { font-size: 0.7rem; color: #d1d1d6; max-width: 60px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 500; }
 
-        /* Chat Scroll Feed */
+        /* Chat Scroll Stream */
         #chat-messages {
             flex: 1;
             padding: 16px;
@@ -160,7 +159,6 @@
             gap: 10px;
             align-items: flex-start;
             animation: slideUp 0.25s ease-out;
-            transform-style: preserve-3d;
         }
         @keyframes slideUp { from { opacity: 0; transform: translateY(12px) scale(0.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
@@ -211,31 +209,31 @@
         .like-btn.liked { background: rgba(255, 45, 85, 0.25); color: #ff2d55; border-color: rgba(255, 45, 85, 0.4); }
         .delete-btn { background: none; border: none; color: #a1a1aa; cursor: pointer; font-size: 0.72rem; }
 
-        /* Realtime Typing Indicator Bar */
+        /* Realtime Typing Indicator */
         #typing-indicator {
-            padding: 4px 18px;
-            font-size: 0.72rem;
+            padding: 2px 18px;
+            font-size: 0.7rem;
             color: #64d2ff;
             font-style: italic;
-            min-height: 18px;
+            min-height: 16px;
         }
 
-        /* Responsive 3D Glass Footer (Guaranteed Full Visibility) */
+        /* Fully Visible Footer Input */
         .chat-footer {
             padding: 12px 14px;
-            padding-bottom: calc(12px + env(safe-area-inset-bottom)); /* iOS Safe Notch */
-            background: rgba(25, 25, 32, 0.75);
-            backdrop-filter: blur(30px);
+            padding-bottom: calc(12px + env(safe-area-inset-bottom));
+            background: rgba(25, 25, 35, 0.8);
+            backdrop-filter: blur(35px);
             border-top: 1px solid rgba(255, 255, 255, 0.12);
             flex-shrink: 0;
-            box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.6);
         }
         .input-form { display: flex; flex-direction: column; gap: 6px; }
         .input-row { display: flex; gap: 8px; align-items: center; width: 100%; }
         
         input[type="text"], input[type="password"] {
             flex: 1;
-            min-width: 0; /* Prevents button overflow */
+            min-width: 0;
             background: rgba(255, 255, 255, 0.08);
             color: #ffffff;
             border: 1px solid rgba(255, 255, 255, 0.15);
@@ -259,7 +257,7 @@
             font-weight: 700;
             cursor: pointer;
             height: 44px;
-            flex-shrink: 0; /* Ensures full width visibility */
+            flex-shrink: 0;
             box-shadow: inset 0 1px 1px rgba(255,255,255,0.4), 0 4px 15px rgba(0, 113, 227, 0.4);
             display: flex; align-items: center; justify-content: center;
         }
@@ -281,7 +279,7 @@
         .overlay-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.75);
+            background: rgba(0, 0, 0, 0.8);
             backdrop-filter: blur(25px);
             z-index: 100;
             display: flex;
@@ -291,12 +289,12 @@
             padding: 20px;
         }
         .modal-box {
-            background: rgba(30, 30, 40, 0.8);
+            background: rgba(30, 30, 42, 0.85);
             backdrop-filter: blur(40px);
             padding: 28px;
             border-radius: 24px;
             border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: inset 0 1px 1px rgba(255,255,255,0.3), 0 20px 50px rgba(0,0,0,0.8);
+            box-shadow: inset 0 1px 1px rgba(255,255,255,0.3), 0 20px 50px rgba(0,0,0,0.85);
             width: 100%;
             max-width: 360px;
             display: flex;
@@ -338,13 +336,12 @@
     <div class="ambient-bg">
         <div class="orb orb-1"></div>
         <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
     </div>
 
     <!-- 1. Login Modal -->
     <div id="login-screen" class="overlay-screen">
         <div class="modal-box">
-            <h2>Ombiri 3D</h2>
+            <h2>Ombiri iOS</h2>
             <p style="font-size: 0.8rem; color: #a1a1aa; text-align: center;">Enter security access credentials</p>
             <input type="text" id="username-input" placeholder="Codename / Account Name">
             <input type="password" id="password-input" placeholder="Security Passcode (162012)">
@@ -433,10 +430,18 @@
         let currentDP = localStorage.getItem("ombiri_dp") || "https://i.imgur.com/6VBx3io.png";
         let currentRecipient = "group";
         let typingTimeout = null;
+        let lastMessageKey = null;
 
         if (currentUser) {
             document.getElementById("login-screen").style.display = "none";
             initChat();
+            requestNotificationPermission();
+        }
+
+        function requestNotificationPermission() {
+            if ("Notification" in window && Notification.permission !== "granted") {
+                Notification.requestPermission();
+            }
         }
 
         function handleLogin() {
@@ -462,6 +467,7 @@
             });
 
             document.getElementById("login-screen").style.display = "none";
+            requestNotificationPermission();
             initChat();
         }
 
@@ -524,6 +530,7 @@
             loadActiveUsersAndStories();
             loadMessages();
             listenForTyping();
+            listenForNotifications();
         }
 
         function loadActiveUsersAndStories() {
@@ -604,6 +611,39 @@
                     }
                 });
                 container.scrollTop = container.scrollHeight;
+            });
+        }
+
+        // Native Phone Push Notifications Trigger
+        function listenForNotifications() {
+            const dbRef = firebase.database().ref('messages');
+            let isInitialLoad = true;
+
+            dbRef.limitToLast(1).on('child_added', (snapshot) => {
+                if (isInitialLoad) {
+                    lastMessageKey = snapshot.key;
+                    isInitialLoad = false;
+                    return;
+                }
+
+                const data = snapshot.val();
+                if (data && snapshot.key !== lastMessageKey) {
+                    lastMessageKey = snapshot.key;
+                    
+                    // Trigger notification only if message is from someone else
+                    if (data.sender !== currentUser && "Notification" in window && Notification.permission === "granted") {
+                        const title = `New message from ${data.sender}`;
+                        const options = {
+                            body: data.message || "Sent an image attachment",
+                            icon: data.dp || "https://i.imgur.com/6VBx3io.png"
+                        };
+                        try {
+                            new Notification(title, options);
+                        } catch (e) {
+                            console.log("Notification error:", e);
+                        }
+                    }
+                }
             });
         }
 
